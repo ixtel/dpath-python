@@ -42,7 +42,7 @@ def __safe_path__(path, separator):
     return segments
 
 
-def new(obj, path, value, separator='/'):
+def new(obj, path, value, separator='/',order=False):
     '''
     Set the element at the terminus of path to value, and create
     it if it does not exist (as opposed to 'set' that can only
@@ -53,7 +53,7 @@ def new(obj, path, value, separator='/'):
     keys
     '''
     segments = __safe_path__(path, separator)
-    return dpath.segments.set(obj, segments, value)
+    return dpath.segments.set(obj, segments, value, order=order)
 
 
 def delete(obj, glob, separator='/', afilter=None):
@@ -113,7 +113,7 @@ def delete(obj, glob, separator='/', afilter=None):
     return deleted
 
 
-def set(obj, glob, value, separator='/', afilter=None):
+def set(obj, glob, value, separator='/', afilter=None, order=False):
     '''
     Given a path glob, set all existing elements in the document
     to the given value. Returns the number of elements changed.
@@ -131,7 +131,7 @@ def set(obj, glob, value, separator='/', afilter=None):
         selected = afilter and dpath.segments.leaf(found) and afilter(found)
 
         if (matched and not afilter) or (matched and selected):
-            dpath.segments.set(obj, segments, value, create_missing=False)
+            dpath.segments.set(obj, segments, value, create_missing=False, order=order)
             counter[0] += 1
 
     [changed] = dpath.segments.foldm(obj, f, [0])
