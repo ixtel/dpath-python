@@ -2,6 +2,7 @@ from copy import deepcopy
 from dpath.exceptions import InvalidGlob, InvalidKeyName, PathNotFound
 from dpath import options
 from fnmatch import fnmatchcase
+from collections import OrderedDict
 
 from . import PY2
 
@@ -279,7 +280,7 @@ def extend(thing, index, value=None):
     return thing
 
 
-def set(obj, segments, value, create_missing=True, hints=()):
+def set(obj, segments, value, create_missing=True, hints=(), order=False):
     '''
     Set the value in obj at the place indicated by segments. If
     create_missing is True (default), then create any missing path
@@ -318,7 +319,7 @@ def set(obj, segments, value, create_missing=True, hints=()):
                     if isinstance(segment_next, (int, long)):
                         current[segment] = []
                     else:
-                        current[segment] = {}
+                        current[segment] = OrderedDict() if order else {}
             else:
                 raise
         current = current[segment]
